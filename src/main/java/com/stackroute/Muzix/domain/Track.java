@@ -1,5 +1,7 @@
 package com.stackroute.Muzix.domain;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -8,9 +10,15 @@ import javax.persistence.Id;
 public class Track {
     //properties
     @Id     //annotated with @Id to make it primary key in database
-    private int trackId;            //Track's id
-    private String trackName;       //Track's Name
-    private String trackComments;   //Track's Comments, used to store artist's name
+    @ApiModelProperty(notes = "The Track id")           //Swagger2's annotation to describe properties
+    // in the documentation
+    private int trackId;                                //Track's id
+
+    @ApiModelProperty(notes = "The name of the Track")
+    private String trackName;                           //Name of the track
+
+    @ApiModelProperty(notes = "The comments about the Track")
+    private String trackComments;                       //comments about the track, used to store artist name
 
     //No args constructor
     public Track() {
