@@ -1,9 +1,15 @@
 package com.stackroute.Muzix.config;
 
+import com.stackroute.Muzix.domain.Track;
+import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
+import com.stackroute.Muzix.service.TrackService;
 import org.h2.server.web.WebServlet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -19,6 +25,29 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //annotation to enable Swagger2
 @EnableSwagger2
 public class WebConfiguration {
+
+    //TrackService Dependency to save tracks
+    private final TrackService trackService;
+
+    //Autowired constructor to inject dependency
+    @Autowired
+    public WebConfiguration(TrackService trackService) {
+        this.trackService = trackService;
+    }
+
+    //Event Listener called when Context Refreshed Event is called
+    @EventListener
+    public void handleContextRefreshEvent(ContextRefreshedEvent cfr) {
+        try {
+            //add tracks to database
+            trackService.saveTrack(new Track(1,"Trivia:Love","By RM"));
+            trackService.saveTrack(new Track(2,"Trivia:Seesaw","By Suga"));
+            trackService.saveTrack(new Track(3,"Trivia:Just Dance","By J-Hope"));
+            System.out.println("Context Refreshed");
+        } catch (TrackAlreadyExistsException e) {
+            e.printStackTrace();
+        }
+    }
 
     //Bean to enable H2 console
     @Bean
