@@ -1,6 +1,8 @@
 package com.stackroute.Muzix.service;
 
 import com.stackroute.Muzix.domain.Track;
+import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
+import com.stackroute.Muzix.exceptions.TrackNotFoundException;
 
 import java.util.List;
 
@@ -8,7 +10,10 @@ import java.util.List;
 public interface TrackService {
 
     //method to save a track in database
-    Track saveTrack(Track track);
+    Track saveTrack(Track track) throws TrackAlreadyExistsException;
+
+    //method to update a track in database
+    Track updateTrack(Track track) throws TrackNotFoundException;
 
     //method to delete a track
     void deleteTrack(int id);

@@ -1,6 +1,8 @@
 package com.stackroute.Muzix.controller;
 
 import com.stackroute.Muzix.domain.Track;
+import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
+import com.stackroute.Muzix.exceptions.TrackNotFoundException;
 import com.stackroute.Muzix.service.TrackService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,19 +35,24 @@ public class TrackController {
     public ResponseEntity<?> saveTrack(@RequestBody Track track){
         ResponseEntity responseEntity;
         try {
-                //check if track already exists
-                if (trackService.getTrackById(track.getTrackId()) != null){
-                    //if it does then update the track
-                    trackService.saveTrack(track);
-                    responseEntity = new ResponseEntity<>("Successfully updated", HttpStatus.OK);
-                }
-                else {
-                    //otherwise create new track
-                    trackService.saveTrack(track);
-                    responseEntity = new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
-                }
+            trackService.saveTrack(track);
+            responseEntity = new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
 
-        }catch (Exception e){
+        }catch (TrackAlreadyExistsException e){
+            responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
+        }
+        return responseEntity;
+    }
+
+    @ApiOperation(value = "Update a track", response = ResponseEntity.class)
+    @PutMapping("track")
+    public ResponseEntity<?> updateTrack(@RequestBody Track track){
+        ResponseEntity responseEntity;
+        try {
+            trackService.updateTrack(track);
+            responseEntity = new ResponseEntity<>("Successfully updated", HttpStatus.OK);
+
+        }catch (TrackNotFoundException e){
             responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
         }
         return responseEntity;
