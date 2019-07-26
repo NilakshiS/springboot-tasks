@@ -18,4 +18,7 @@ public interface TrackService {
 
     //method to get a track by id
     Track getTrackById(int id);
+
+    //method to search track by name or comments
+    List<Track> getTrackByNameOrComments(String name);
 }

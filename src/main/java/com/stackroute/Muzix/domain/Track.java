@@ -10,7 +10,7 @@ public class Track {
     @Id     //annotated with @Id to make it primary key in database
     private int trackId;            //Track's id
     private String trackName;       //Track's Name
-    private String trackComments;   //Track's Comments
+    private String trackComments;   //Track's Comments, used to store artist's name
 
     //No args constructor
     public Track() {

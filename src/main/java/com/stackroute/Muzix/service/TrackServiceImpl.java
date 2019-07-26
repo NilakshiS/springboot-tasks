@@ -43,4 +43,10 @@ public class TrackServiceImpl implements TrackService {
     public Track getTrackById(int id) {
         return trackRepository.findById(id).orElse(null);
     }
+
+    @Override
+    //method to search a track by its name or comments
+    public List<Track> getTrackByNameOrComments(String name) {
+        return trackRepository.findTrackByNameOrComments(name);
+    }
 }

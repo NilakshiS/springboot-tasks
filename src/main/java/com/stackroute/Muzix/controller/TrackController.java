@@ -74,4 +74,11 @@ public class TrackController {
         }
         return responseEntity;
     }
+
+    @GetMapping("track/search/{name}")
+    //handler to search for a track by name or comments
+    public ResponseEntity<?> searchTrack(@PathVariable String name){
+        return new ResponseEntity<>(trackService.getTrackByNameOrComments(name), HttpStatus.OK);
+
+    }
 }
