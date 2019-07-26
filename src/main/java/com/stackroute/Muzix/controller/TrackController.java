@@ -32,30 +32,18 @@ public class TrackController {
     //mapping to post request to /track
     @PostMapping("track")
     //handler to save track
-    public ResponseEntity<?> saveTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
-        try {
-            trackService.saveTrack(track);
-            responseEntity = new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
-
-        }catch (TrackAlreadyExistsException e){
-            responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
-        }
-        return responseEntity;
+    public ResponseEntity<?> saveTrack(@RequestBody Track track) throws TrackAlreadyExistsException {
+        trackService.saveTrack(track);
+        return new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Update a track", response = ResponseEntity.class)
+    //mapping to put request to /track
     @PutMapping("track")
-    public ResponseEntity<?> updateTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
-        try {
-            trackService.updateTrack(track);
-            responseEntity = new ResponseEntity<>("Successfully updated", HttpStatus.OK);
-
-        }catch (TrackNotFoundException e){
-            responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
-        }
-        return responseEntity;
+    //handler to update a track
+    public ResponseEntity<?> updateTrack(@RequestBody Track track) throws TrackNotFoundException {
+        trackService.updateTrack(track);
+        return new ResponseEntity<>("Successfully updated", HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get a list of all available tracks", response = ResponseEntity.class)
