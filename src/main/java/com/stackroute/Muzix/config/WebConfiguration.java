@@ -3,7 +3,6 @@ package com.stackroute.Muzix.config;
 import com.stackroute.Muzix.domain.Track;
 import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
 import com.stackroute.Muzix.service.TrackService;
-import com.stackroute.Muzix.service.TrackServiceImpl;
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -27,6 +26,30 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class WebConfiguration {
 
+    //TrackService Dependency to save tracks
+    private final TrackService trackService;
+
+    //Autowired constructor to inject dependency
+    @Autowired
+    public WebConfiguration(TrackService trackService) {
+        this.trackService = trackService;
+    }
+
+    //Event Listener called when Context Refreshed Event is called
+    @EventListener
+    public void handleContextRefreshEvent(ContextRefreshedEvent cfr) {
+        try {
+            //add tracks to database
+            trackService.saveTrack(new Track(1,"Trivia:Love","By RM"));
+            trackService.saveTrack(new Track(2,"Trivia:Seesaw","By Suga"));
+            trackService.saveTrack(new Track(3,"Trivia:Just Dance","By J-Hope"));
+            trackService.saveTracksFromApi();
+            System.out.println("Context Refreshed");
+        } catch (TrackAlreadyExistsException e) {
+            e.printStackTrace();
+        }
+    }
+
     //Bean to enable H2 console
     @Bean
     ServletRegistrationBean h2ServletRegistration(){
@@ -37,7 +60,7 @@ public class WebConfiguration {
 
     //Bean for docket api, used for swagger2 documnetation
     @Bean
-    public Docket api() {
+    public Docket docketApi() {
         return new Docket(DocumentationType.SWAGGER_2).select()
                 .apis(RequestHandlerSelectors
                         .basePackage("com.stackroute.Muzix.controller"))

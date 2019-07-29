@@ -17,6 +17,7 @@ public class TrackControllerAdvice extends ResponseEntityExceptionHandler {
     //Exception Handler for TrackNotFoundException
     @ExceptionHandler(value = {TrackNotFoundException.class})
     protected ResponseEntity<Object> handleNotFoundConflict(Exception ex, WebRequest request) {
+
         String bodyOfResponse = "Track not found!";
         return handleExceptionInternal(ex, bodyOfResponse,new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
@@ -24,6 +25,7 @@ public class TrackControllerAdvice extends ResponseEntityExceptionHandler {
     //Exception Handler for TrackAlreadyExistsException
     @ExceptionHandler(value = {TrackAlreadyExistsException.class})
     protected ResponseEntity<Object> handleAlreadyExistsConflict(Exception ex, WebRequest request) {
+
         String bodyOfResponse = "Track already exists!";
         return handleExceptionInternal(ex, bodyOfResponse,new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
