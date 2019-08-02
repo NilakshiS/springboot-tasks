@@ -134,12 +134,12 @@ public class TrackServiceTest {
 
     @Test
     public void searchTrackTest() {
-        when(trackRepository.findTrackByNameOrComments(anyString())).thenReturn(list);
+        when(trackRepository.findByTrackCommentsContainingIgnoreCaseOrTrackNameContainingIgnoreCase(anyString(),anyString())).thenReturn(list);
         List<Track> searchResultsTrack = trackService.getTrackByNameOrComments("track");
         Assert.assertEquals(searchResultsTrack,list);
 
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).findTrackByNameOrComments("track");
+        verify(trackRepository,times(1)).findByTrackCommentsContainingIgnoreCaseOrTrackNameContainingIgnoreCase("track","track");
 
     }
 

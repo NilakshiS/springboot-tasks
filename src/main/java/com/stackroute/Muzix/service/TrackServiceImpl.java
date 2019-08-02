@@ -91,7 +91,7 @@ public class TrackServiceImpl implements TrackService {
     //method to search for track by name or comments
     @Override
     public List<Track> getTrackByNameOrComments(String name) {
-        return trackRepository.findTrackByNameOrComments(name);
+        return trackRepository.findByTrackCommentsContainingIgnoreCaseOrTrackNameContainingIgnoreCase(name,name);
     }
 
     //method to get tracks from api and save to database
@@ -117,6 +117,7 @@ public class TrackServiceImpl implements TrackService {
             for (int i = 0; i < arrayNode.size(); i++) {
                 //get a new Track object and fill it with data using setters
                 Track track = new Track();
+                track.setTrackId(i+4);//added 4 because 3 tracks are already added at startup
                 track.setTrackName(arrayNode.get(i).path("name").asText());
                 track.setTrackComments(arrayNode.get(i).path("artist").path("name").asText());
                 //save the track to database

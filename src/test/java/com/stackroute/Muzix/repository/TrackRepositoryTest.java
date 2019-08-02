@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -16,8 +16,7 @@ import java.util.List;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = NONE)
+@DataMongoTest
 public class TrackRepositoryTest {
 
     @Autowired
@@ -28,6 +27,7 @@ public class TrackRepositoryTest {
     public void setUp()
     {
         track = new Track();
+        track.setTrackId(4);
         track.setTrackName("Love Maze");
         track.setTrackComments("BTS");
 
@@ -77,7 +77,7 @@ public class TrackRepositoryTest {
 
     @Test
     public void testFindTrackByNameOrComments(){
-        List<Track> fetchUser = trackRepository.findTrackByNameOrComments("Love Maze");
+        List<Track> fetchUser = trackRepository.findByTrackCommentsContainingIgnoreCaseOrTrackNameContainingIgnoreCase("Love Maze","");
         Assert.assertNotNull(fetchUser);
 
     }
@@ -86,9 +86,11 @@ public class TrackRepositoryTest {
     public void testGetAllUser(){
         trackRepository.deleteAll();
         Track track = new Track();
+        track.setTrackId(5);
         track.setTrackName("Fake Love");
         track.setTrackComments("BTS");
         Track track1 = new Track();
+        track1.setTrackId(6);
         track1.setTrackName("DNA");
         track1.setTrackComments("BTS");
         trackRepository.save(track);

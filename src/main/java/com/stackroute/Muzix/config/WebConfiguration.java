@@ -4,7 +4,6 @@ import com.stackroute.Muzix.domain.Track;
 import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
 import com.stackroute.Muzix.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
