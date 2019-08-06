@@ -11,7 +11,7 @@ public interface TrackService {
     Track saveTrack(Track track);
 
     //method to delete a track
-    void deleteTrack(int id);
+    Track deleteTrack(int id);
 
     //method to get all tracks saved in database
     List<Track> getAllTracks();
