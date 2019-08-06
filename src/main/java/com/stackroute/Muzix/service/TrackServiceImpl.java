@@ -23,13 +23,21 @@ public class TrackServiceImpl implements TrackService {
     @Override
     //method to save track
     public Track saveTrack(Track track) {
-        return trackRepository.save(track);
+        try{
+            return trackRepository.save(track);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     //method to delete track
-    public void deleteTrack(int id) {
+    public Track deleteTrack(int id) {
+        Track track = trackRepository.findById(id).orElse(null);
         trackRepository.deleteById(id);
+        return track;
     }
 
     @Override
