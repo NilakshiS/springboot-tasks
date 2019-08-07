@@ -33,11 +33,13 @@ public class TrackServiceImpl implements TrackService {
         //otherwise try to save track
         Track savedTrack = trackRepository.save(track);
         //if new track was not created throw custom exception
-        if (savedTrack == null) {
-            throw new TrackAlreadyExistsException("Track Already Exists!");
-        }
         //return the track that was inserted
-        return savedTrack;
+        try {
+            return trackRepository.save(track);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     //method to update an existing track
@@ -54,8 +56,10 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     //method to delete track
-    public void deleteTrack(int id) {
+    public Track deleteTrack(int id) {
+        Track track = trackRepository.findById(id).orElse(null);
         trackRepository.deleteById(id);
+        return track;
     }
 
     @Override
