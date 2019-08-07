@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class TrackController {
 
     private TrackService trackService;
+    private ResponseEntity responseEntity;
+
 
     //Autowired to inject the trackService dependency
     @Autowired
@@ -24,7 +26,6 @@ public class TrackController {
     @PostMapping("track")
     //handler to save track
     public ResponseEntity<?> saveTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
         try {
                 //check if track already exists
                 if (trackService.getTrackById(track.getTrackId()) != null){
@@ -64,7 +65,6 @@ public class TrackController {
     @PostMapping("track/{id}")
     //handler to delete a track by its id
     public ResponseEntity<?> deleteTrack(@PathVariable String id){
-        ResponseEntity responseEntity;
         try {
             trackService.deleteTrack(Integer.parseInt(id));
             responseEntity = new ResponseEntity<>("track deleted", HttpStatus.OK);
