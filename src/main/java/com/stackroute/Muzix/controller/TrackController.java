@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 public class TrackController {
 
     private TrackService trackService;
+    private ResponseEntity responseEntity;
+
 
     //Autowired to inject the trackService dependency
     @Autowired
@@ -33,7 +35,6 @@ public class TrackController {
     @PostMapping("track")
     //handler to save track
     public ResponseEntity<?> saveTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
         try {
             trackService.saveTrack(track);
             responseEntity = new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
@@ -47,7 +48,6 @@ public class TrackController {
     @ApiOperation(value = "Update a track", response = ResponseEntity.class)
     @PutMapping("track")
     public ResponseEntity<?> updateTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
         try {
             trackService.updateTrack(track);
             responseEntity = new ResponseEntity<>("Successfully updated", HttpStatus.OK);
@@ -84,7 +84,6 @@ public class TrackController {
     @DeleteMapping("track/{id}")
     //handler to delete a track by its id
     public ResponseEntity<?> deleteTrack(@PathVariable String id){
-        ResponseEntity responseEntity;
         try {
             trackService.deleteTrack(Integer.parseInt(id));
             responseEntity = new ResponseEntity<>("track deleted", HttpStatus.OK);
