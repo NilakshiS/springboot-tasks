@@ -16,7 +16,7 @@ public interface TrackService {
     Track updateTrack(Track track) throws TrackNotFoundException;
 
     //method to delete a track
-    void deleteTrack(int id) throws TrackNotFoundException;
+    Track deleteTrack(int id) throws TrackNotFoundException;
 
     //method to get tracks from last.fm api and save in database
     void saveTracksFromApi();

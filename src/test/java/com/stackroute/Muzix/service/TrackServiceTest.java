@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -56,7 +57,7 @@ public class TrackServiceTest {
 
     @Test(expected = TrackAlreadyExistsException.class)
     public void saveTrackTestFailure() throws TrackAlreadyExistsException {
-        when(trackRepository.save(any())).thenReturn(null);
+        when(trackRepository.existsById(anyInt())).thenReturn(true);
         Track savedTrack = trackService.saveTrack(track);
         System.out.println("savedTrack" + savedTrack);
         //Assert.assertEquals(user,savedUser);
@@ -100,11 +101,11 @@ public class TrackServiceTest {
     @Test
     public void deleteTrackTestSuccess() throws TrackNotFoundException {
         when(trackRepository.existsById(anyInt())).thenReturn(true);
-
-        trackService.deleteTrack(track.getTrackId());
-
+        when(trackRepository.findById(anyInt())).thenReturn(Optional.of(track));
+        Track deletedTrack = trackService.deleteTrack(track.getTrackId());
+        Assert.assertEquals(deletedTrack,track);
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).deleteById(track.getTrackId());
+        verify(trackRepository, times(1)).deleteById(track.getTrackId());
 
     }
 
