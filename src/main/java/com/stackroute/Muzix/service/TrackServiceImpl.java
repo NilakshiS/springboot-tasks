@@ -39,11 +39,13 @@ public class TrackServiceImpl implements TrackService {
         //otherwise try to save track
         Track savedTrack = trackRepository.save(track);
         //if new track was not created throw custom exception
-        if (savedTrack == null) {
-            throw new TrackAlreadyExistsException("Track Already Exists!");
-        }
         //return the track that was inserted
-        return savedTrack;
+        try {
+            return savedTrack;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     //method to update an existing track
@@ -60,14 +62,16 @@ public class TrackServiceImpl implements TrackService {
 
     //method to delete a track
     @Override
-    public void deleteTrack(int id)throws TrackNotFoundException {
+    public Track deleteTrack(int id) throws TrackNotFoundException {
         //check if track exists
         if (!trackRepository.existsById(id)) {
             //throw custom exception
             throw new TrackNotFoundException("Track Not Found!");
         }
         //otherwise delete the track
+        Track track = trackRepository.findById(id).orElse(null);
         trackRepository.deleteById(id);
+        return track;
     }
 
     //method to get all tracks in database
@@ -96,7 +100,7 @@ public class TrackServiceImpl implements TrackService {
 
     //method to get tracks from api and save to database
     @Override
-    public void saveTracksFromApi(){
+    public void saveTracksFromApi() {
         //RestTemplate gets response from an api
         RestTemplate restTemplate = new RestTemplate();
         //url of Last.fm api

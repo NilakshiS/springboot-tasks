@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -28,11 +29,11 @@ public class TrackServiceTest {
     //Inject the mocks as dependencies into TrackServiceImpl
     @InjectMocks
     TrackServiceImpl trackService;
-    List<Track> list= null;
+    List<Track> list = null;
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
         //Initialising the mock object
         MockitoAnnotations.initMocks(this);
         track = new Track();
@@ -47,16 +48,16 @@ public class TrackServiceTest {
 
         when(trackRepository.save(any())).thenReturn(track);
         Track savedTrack = trackService.saveTrack(track);
-        Assert.assertEquals(track,savedTrack);
+        Assert.assertEquals(track, savedTrack);
 
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).save(track);
+        verify(trackRepository, times(1)).save(track);
 
     }
 
     @Test(expected = TrackAlreadyExistsException.class)
     public void saveTrackTestFailure() throws TrackAlreadyExistsException {
-        when(trackRepository.save(any())).thenReturn(null);
+        when(trackRepository.existsById(anyInt())).thenReturn(true);
         Track savedTrack = trackService.saveTrack(track);
         System.out.println("savedTrack" + savedTrack);
         //Assert.assertEquals(user,savedUser);
@@ -78,10 +79,10 @@ public class TrackServiceTest {
         when(trackRepository.existsById(any())).thenReturn(true);
         when(trackRepository.save(any())).thenReturn(track);
         Track savedTrack = trackService.updateTrack(track);
-        Assert.assertEquals(track,savedTrack);
+        Assert.assertEquals(track, savedTrack);
 
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).save(track);
+        verify(trackRepository, times(1)).save(track);
 
     }
 
@@ -90,9 +91,7 @@ public class TrackServiceTest {
         when(trackRepository.existsById(anyInt())).thenReturn(false);
         when(trackRepository.save(any())).thenReturn(null);
         Track savedTrack = trackService.updateTrack(track);
-
         //Assert.assertEquals(user,savedUser);
-
        /*doThrow(new UserAlreadyExistException()).when(userRepository).findById(eq(101));
        userService.saveUser(user);*/
     }
@@ -100,11 +99,11 @@ public class TrackServiceTest {
     @Test
     public void deleteTrackTestSuccess() throws TrackNotFoundException {
         when(trackRepository.existsById(anyInt())).thenReturn(true);
-
-        trackService.deleteTrack(track.getTrackId());
-
+        when(trackRepository.findById(anyInt())).thenReturn(Optional.of(track));
+        Track deletedTrack = trackService.deleteTrack(track.getTrackId());
+        Assert.assertEquals(deletedTrack, track);
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).deleteById(track.getTrackId());
+        verify(trackRepository, times(1)).deleteById(track.getTrackId());
 
     }
 
@@ -120,9 +119,9 @@ public class TrackServiceTest {
         when(trackRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(track));
 
         Track fetchedTrack = trackService.getTrackById(track.getTrackId());
-        Assert.assertEquals(track,fetchedTrack);
+        Assert.assertEquals(track, fetchedTrack);
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).findById(track.getTrackId());
+        verify(trackRepository, times(1)).findById(track.getTrackId());
 
     }
 
@@ -136,10 +135,10 @@ public class TrackServiceTest {
     public void searchTrackTest() {
         when(trackRepository.findTrackByNameOrComments(anyString())).thenReturn(list);
         List<Track> searchResultsTrack = trackService.getTrackByNameOrComments("track");
-        Assert.assertEquals(searchResultsTrack,list);
+        Assert.assertEquals(searchResultsTrack, list);
 
         //verify here verifies that userRepository save method is only called once
-        verify(trackRepository,times(1)).findTrackByNameOrComments("track");
+        verify(trackRepository, times(1)).findTrackByNameOrComments("track");
 
     }
 
