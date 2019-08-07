@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class TrackController {
 
     private TrackService trackService;
+    private ResponseEntity responseEntity;
 
     //Autowired to inject the trackService dependency
     @Autowired
@@ -32,28 +33,26 @@ public class TrackController {
     //mapping to post request to /track
     @PostMapping("track")
     //handler to save track
-    public ResponseEntity<?> saveTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
+    public ResponseEntity<?> saveTrack(@RequestBody Track track) {
         try {
             trackService.saveTrack(track);
             responseEntity = new ResponseEntity<>("Successfully created", HttpStatus.CREATED);
 
-        }catch (TrackAlreadyExistsException e){
-            responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
+        } catch (TrackAlreadyExistsException e) {
+            responseEntity = new ResponseEntity<>("caught:" + e.getMessage(), HttpStatus.CONFLICT);
         }
         return responseEntity;
     }
 
     @ApiOperation(value = "Update a track", response = ResponseEntity.class)
     @PutMapping("track")
-    public ResponseEntity<?> updateTrack(@RequestBody Track track){
-        ResponseEntity responseEntity;
+    public ResponseEntity<?> updateTrack(@RequestBody Track track) {
         try {
             trackService.updateTrack(track);
             responseEntity = new ResponseEntity<>("Successfully updated", HttpStatus.OK);
 
-        }catch (TrackNotFoundException e){
-            responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
+        } catch (TrackNotFoundException e) {
+            responseEntity = new ResponseEntity<>("caught:" + e.getMessage(), HttpStatus.CONFLICT);
         }
         return responseEntity;
     }
@@ -62,7 +61,7 @@ public class TrackController {
     //mapping to get request to /track
     @GetMapping("track")
     //handler to get all tracks
-    public ResponseEntity<?> getAllTracks(){
+    public ResponseEntity<?> getAllTracks() {
         return new ResponseEntity<>(trackService.getAllTracks(), HttpStatus.OK);
     }
 
@@ -70,11 +69,10 @@ public class TrackController {
     //mapping to get request to /track/id
     @GetMapping("track/{id}")
     //handler to get a track by its id
-    public ResponseEntity<?> getTrack(@PathVariable String id){
+    public ResponseEntity<?> getTrack(@PathVariable String id) {
         try {
             return new ResponseEntity<>(trackService.getTrackById(Integer.parseInt(id)), HttpStatus.OK);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
@@ -83,14 +81,14 @@ public class TrackController {
     //mapping to delete request to /track/id
     @DeleteMapping("track/{id}")
     //handler to delete a track by its id
-    public ResponseEntity<?> deleteTrack(@PathVariable String id){
-        ResponseEntity responseEntity;
+    public ResponseEntity<?> deleteTrack(@PathVariable String id) {
+
         try {
             trackService.deleteTrack(Integer.parseInt(id));
             responseEntity = new ResponseEntity<>("track deleted", HttpStatus.OK);
 
-        }catch (Exception e){
-            responseEntity = new ResponseEntity<>("caught:"+e.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>("caught:" + e.getMessage(), HttpStatus.CONFLICT);
         }
         return responseEntity;
     }
@@ -99,7 +97,7 @@ public class TrackController {
     //mapping to get request to /track/search/name
     @GetMapping("track/search/{name}")
     //handler to search for a track by name or comments
-    public ResponseEntity<?> searchTrack(@PathVariable String name){
+    public ResponseEntity<?> searchTrack(@PathVariable String name) {
         return new ResponseEntity<>(trackService.getTrackByNameOrComments(name), HttpStatus.OK);
 
     }
