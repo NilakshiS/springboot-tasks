@@ -3,11 +3,16 @@ package com.stackroute.Muzix.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.stackroute.Muzix.TrackMapper;
 import com.stackroute.Muzix.domain.Track;
+import com.stackroute.Muzix.dto.TrackDto;
 import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
 import com.stackroute.Muzix.exceptions.TrackNotFoundException;
 import com.stackroute.Muzix.repository.TrackRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +26,7 @@ public class TrackServiceImpl implements TrackService {
 
     //TrackRepository object to perform database
     private TrackRepository trackRepository;
+    private final Logger logger = (Logger) LoggerFactory.getLogger(this.getClass());
 
     //Autowired constructor to inject dependency
     @Autowired
@@ -50,7 +56,11 @@ public class TrackServiceImpl implements TrackService {
 
     //method to update an existing track
     @Override
-    public Track updateTrack(Track track) throws TrackNotFoundException {
+    public Track updateTrack(TrackDto trackDto) throws TrackNotFoundException {
+        logger.debug(trackDto.toString());
+        System.out.println("in here");
+        Track track = TrackMapper.INSTANCE.trackDTOToTrack(trackDto);
+        logger.debug(track.toString());
         //check if track does not exist
         if (!trackRepository.existsById(track.getTrackId())) {
             //throw custom exception
@@ -81,6 +91,7 @@ public class TrackServiceImpl implements TrackService {
     }
 
     //method to get a single track by id
+    @Cacheable("track")
     @Override
     public Track getTrackById(int id) throws TrackNotFoundException {
         //check if track exists

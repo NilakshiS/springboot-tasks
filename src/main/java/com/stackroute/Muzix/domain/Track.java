@@ -13,8 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 //Lombok annotations
 //Lombok plugin automatically generates getters, setters and constructors for any class marked as @Data
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Track {
 
@@ -29,4 +27,46 @@ public class Track {
 
     @ApiModelProperty(notes = "The comments about the Track")
     private String trackComments;                       //comments about the track, used to store artist name
+
+    public Track(int trackId, String trackName, String trackComments) {
+        this.trackId = trackId;
+        this.trackName = trackName;
+        this.trackComments = trackComments;
+    }
+
+    public Track() {
+    }
+
+    public int getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(int trackId) {
+        this.trackId = trackId;
+    }
+
+    public String getTrackName() {
+        return trackName;
+    }
+
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
+    }
+
+    public String getTrackComments() {
+        return trackComments;
+    }
+
+    public void setTrackComments(String trackComments) {
+        this.trackComments = trackComments;
+    }
+
+    @Override
+    public String toString() {
+        return "Track{" +
+                "trackId=" + trackId +
+                ", trackName='" + trackName + '\'' +
+                ", trackComments='" + trackComments + '\'' +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package com.stackroute.Muzix.service;
 
+import com.stackroute.Muzix.TrackMapper;
 import com.stackroute.Muzix.domain.Track;
 import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
 import com.stackroute.Muzix.exceptions.TrackNotFoundException;
@@ -78,7 +79,7 @@ public class TrackServiceTest {
     public void updateTrackTestSuccess() throws TrackNotFoundException {
         when(trackRepository.existsById(any())).thenReturn(true);
         when(trackRepository.save(any())).thenReturn(track);
-        Track savedTrack = trackService.updateTrack(track);
+        Track savedTrack = trackService.updateTrack(TrackMapper.INSTANCE.trackToTrackDTO(track));
         Assert.assertEquals(track,savedTrack);
 
         //verify here verifies that userRepository save method is only called once
@@ -90,7 +91,7 @@ public class TrackServiceTest {
     public void updateTrackTestFailure() throws TrackNotFoundException {
         when(trackRepository.existsById(anyInt())).thenReturn(false);
         when(trackRepository.save(any())).thenReturn(null);
-        Track savedTrack = trackService.updateTrack(track);
+        Track savedTrack = trackService.updateTrack(TrackMapper.INSTANCE.trackToTrackDTO(track));
 
         //Assert.assertEquals(user,savedUser);
 

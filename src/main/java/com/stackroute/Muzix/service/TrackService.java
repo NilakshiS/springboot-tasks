@@ -1,6 +1,7 @@
 package com.stackroute.Muzix.service;
 
 import com.stackroute.Muzix.domain.Track;
+import com.stackroute.Muzix.dto.TrackDto;
 import com.stackroute.Muzix.exceptions.TrackAlreadyExistsException;
 import com.stackroute.Muzix.exceptions.TrackNotFoundException;
 
@@ -13,7 +14,7 @@ public interface TrackService {
     Track saveTrack(Track track) throws TrackAlreadyExistsException;
 
     //method to update a track already saved in database
-    Track updateTrack(Track track) throws TrackNotFoundException;
+    Track updateTrack(TrackDto track) throws TrackNotFoundException;
 
     //method to delete a track
     Track deleteTrack(int id) throws TrackNotFoundException;
